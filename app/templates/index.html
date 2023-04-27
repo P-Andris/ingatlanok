@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+    <title>Kezdőlap</title>
+</head>
+<body>
+    <main class="w-75 mx-auto text-center">
+        <header><h2>Ajánlataink</h2></header>
+        <article>
+            <a class="btn btn-secondary mb-3" href="{% url 'uj-ingatlan' %}">Új ingatlan hozzáadása</a>
+            {% if ingatlanok %}
+                <div class="table-responsive-md">
+                    <table class="table table-secondary table-striped">
+                        <tr>
+                            <th>Kategória</th>
+                            <th>Leírás</th>
+                            <th>Hirdetés ideje</th>
+                            <th>Tehermentes</th>
+                            <th>Ár</th>
+                            <th>Kép</th>
+                            <th></th>
+                        </tr>
+                        {% for ingatlan in ingatlanok %}
+                            <tr>
+                                <td>{{ ingatlan.kategoria }}</td>
+                                <td>{{ ingatlan.leiras }}</td>
+                                <td>{{ ingatlan.hirdetes_datuma }}</td>
+                                {% if ingatlan.tehermentes %}
+                                    <td>Igen</td>
+                                {% else %}
+                                    <td>Nem</td>
+                                {% endif %}
+                                <td>{{ ingatlan.ar }}</td>
+                                {% if ingatlan.kep_url %}
+                                    <td><img src="{{ ingatlan.kep_url }}" alt="Kép helye" width="150" height="200"></td>
+                                {% else %}
+                                    <td>Nincs kép</td>
+                                {% endif %}
+                                <td><a class="btn btn-danger" href="{% url 'ingatlan-torlese' ingatlan.id %}">Törlés</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% else %}
+                <p class="alert alert-warning">Nincs ilyen adat!</p>
+            {% endif %}
+        </article>
+    </main>
+</body>
+</html>
