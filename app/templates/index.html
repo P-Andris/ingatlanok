@@ -5,11 +5,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+
     <title>Kezdőlap</title>
 </head>
 <body>
+    <script>
+        function ingatlanKiir(azonosito) {
+            const utvonal = `ingatlan_data/${azonosito}`;
+            $.ajax({
+                url: utvonal,
+                type: "GET",
+                dataType: "json",
+                success: (data) => {
+                    const ingatlan = data[0];
+                    const szoveg = `Azonosító: ${ingatlan.id}\nLeírás: ${ingatlan.leiras}\nHirdetés ideje: ${ingatlan.hirdetes_datuma}\nTehermentes: ${ingatlan.tehermentes}\nÁr: ${ingatlan.ar}\nKép URL: ${ingatlan.kep_url}`;
+                    window.alert(szoveg);
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+        }
+    </script>
+
     <main class="w-75 mx-auto text-center">
         <header><h2>Ajánlataink</h2></header>
         <article>
@@ -24,6 +47,7 @@
                             <th>Tehermentes</th>
                             <th>Ár</th>
                             <th>Kép</th>
+                            <th></th>
                             <th></th>
                         </tr>
                         {% for ingatlan in ingatlanok %}
@@ -43,6 +67,7 @@
                                     <td>Nincs kép</td>
                                 {% endif %}
                                 <td><a class="btn btn-danger" href="{% url 'ingatlan-torlese' ingatlan.id %}">Törlés</a></td>
+                                <td><button onclick="ingatlanKiir({{ ingatlan.id }})">Érdekel</button></td>
                             </tr>
                         {% endfor %}
                     </table>

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
 from .models import Kategoria, Ingatlan
@@ -34,3 +34,8 @@ def ingatlanTorlese(request, id):
     ingatlan.delete()
 
     return redirect(index)
+
+
+def ingatlanJSON(request, id):
+    ingatlan = list(Ingatlan.objects.filter(Q(id__exact = id)).values())
+    return JsonResponse(ingatlan, safe = False)
